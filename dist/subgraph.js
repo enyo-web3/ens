@@ -1,3 +1,4 @@
+"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -7,11 +8,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-import { gql } from '@apollo/client';
-import { makeExecutableSchema } from '@graphql-tools/schema';
-import { ethers } from 'ethers';
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ENSSubgraph = void 0;
+const client_1 = require("@apollo/client");
+const schema_1 = require("@graphql-tools/schema");
+const ethers_1 = require("ethers");
 const ENS_REGISTRY_ADDRESS = '0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e';
-export class ENSSubgraph {
+class ENSSubgraph {
     constructor(options) {
         this.ensRegistryAddress = (options === null || options === void 0 ? void 0 : options.customENSRegistryAddress) || ENS_REGISTRY_ADDRESS;
         this.network = (options === null || options === void 0 ? void 0 : options.network) || 'mainnet';
@@ -20,13 +23,13 @@ export class ENSSubgraph {
         const ethersProvider = providers.ethers;
         const ensRegistryAddress = this.ensRegistryAddress;
         const network = this.network;
-        return makeExecutableSchema({
+        return (0, schema_1.makeExecutableSchema)({
             typeDefs: this.typeDefs(),
             resolvers: {
                 Query: {
                     ensName(_, args) {
                         return __awaiter(this, void 0, void 0, function* () {
-                            const encodedName = ethers.utils.namehash(args.name);
+                            const encodedName = ethers_1.ethers.utils.namehash(args.name);
                             const result = yield ethersProvider.multicall(network, [
                                 'function recordExists(bytes32) view returns (bool)',
                                 'function resolver(bytes32) view returns (address)',
@@ -41,7 +44,7 @@ export class ENSSubgraph {
                                 return null;
                             }
                             const provider = ethersProvider.getProvider(network);
-                            const resolver = new ethers.Contract(result[2][0], ['function text(bytes32, string) view returns (string)'], provider);
+                            const resolver = new ethers_1.ethers.Contract(result[2][0], ['function text(bytes32, string) view returns (string)'], provider);
                             // todo(carlos): evaluate the avatar URI into a fetchable URL
                             const avatar = yield resolver.text('avatar');
                             return {
@@ -57,7 +60,7 @@ export class ENSSubgraph {
         });
     }
     typeDefs() {
-        return gql `
+        return (0, client_1.gql) `
       type Query {
         ensName(name: String!): ENSName
       }
@@ -71,4 +74,5 @@ export class ENSSubgraph {
     `;
     }
 }
+exports.ENSSubgraph = ENSSubgraph;
 //# sourceMappingURL=subgraph.js.map
