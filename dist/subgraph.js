@@ -11,11 +11,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ENSSubgraph = void 0;
 const client_1 = require("@apollo/client");
+const core_1 = require("@enyo-web3/core");
 const schema_1 = require("@graphql-tools/schema");
 const ethers_1 = require("ethers");
 const ENS_REGISTRY_ADDRESS = '0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e';
-class ENSSubgraph {
+class ENSSubgraph extends core_1.EnyoSubgraph {
     constructor(options) {
+        super();
         this.ensRegistryAddress = (options === null || options === void 0 ? void 0 : options.customENSRegistryAddress) || ENS_REGISTRY_ADDRESS;
         this.network = (options === null || options === void 0 ? void 0 : options.network) || 'mainnet';
     }

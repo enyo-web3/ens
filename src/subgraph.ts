@@ -1,5 +1,5 @@
 import { gql } from '@apollo/client';
-import type { EnyoSubgraph } from '@enyo-web3/core';
+import { EnyoSubgraph } from '@enyo-web3/core';
 import type { ProvidersWithEthers, Network } from '@enyo-web3/ethers';
 import { makeExecutableSchema } from '@graphql-tools/schema';
 import { ethers } from 'ethers';
@@ -11,11 +11,13 @@ export interface ENSSubgraphOptions {
   network?: string;
 }
 
-export class ENSSubgraph implements EnyoSubgraph<ProvidersWithEthers> {
+export class ENSSubgraph extends EnyoSubgraph<ProvidersWithEthers> {
   ensRegistryAddress: string;
   network: string;
 
   constructor(options?: ENSSubgraphOptions) {
+    super();
+
     this.ensRegistryAddress = options?.customENSRegistryAddress || ENS_REGISTRY_ADDRESS;
     this.network = options?.network || 'mainnet';
   }
