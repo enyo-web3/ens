@@ -35,7 +35,7 @@ class ENSSubgraph extends core_1.EnyoSubgraph {
                             const result = yield ethersProvider.multicall(network, [
                                 'function recordExists(bytes32) view returns (bool)',
                                 'function resolver(bytes32) view returns (address)',
-                                'function owner(bytes32 node) public virtual override view returns (address)',
+                                'function owner(bytes32 node) public view returns (address)',
                             ], [
                                 { target: ensRegistryAddress, functionName: 'recordExists', functionArguments: [encodedName] },
                                 { target: ensRegistryAddress, functionName: 'owner', functionArguments: [encodedName] },
@@ -48,7 +48,7 @@ class ENSSubgraph extends core_1.EnyoSubgraph {
                             const provider = ethersProvider.getProvider(network);
                             const resolver = new ethers_1.ethers.Contract(result[2][0], ['function text(bytes32, string) view returns (string)'], provider);
                             // todo(carlos): evaluate the avatar URI into a fetchable URL
-                            const avatar = yield resolver.text('avatar');
+                            const avatar = yield resolver.text(encodedName, 'avatar');
                             return {
                                 id: encodedName,
                                 labelName: args.name,

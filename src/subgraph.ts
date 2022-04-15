@@ -39,7 +39,7 @@ export class ENSSubgraph extends EnyoSubgraph<ProvidersWithEthers> {
               [
                 'function recordExists(bytes32) view returns (bool)',
                 'function resolver(bytes32) view returns (address)',
-                'function owner(bytes32 node) public virtual override view returns (address)',
+                'function owner(bytes32 node) public view returns (address)',
               ],
               [
                 { target: ensRegistryAddress, functionName: 'recordExists', functionArguments: [encodedName] },
@@ -62,7 +62,7 @@ export class ENSSubgraph extends EnyoSubgraph<ProvidersWithEthers> {
             );
 
             // todo(carlos): evaluate the avatar URI into a fetchable URL
-            const avatar = await resolver.text('avatar');
+            const avatar = await resolver.text(encodedName, 'avatar');
 
             return {
               id: encodedName,
